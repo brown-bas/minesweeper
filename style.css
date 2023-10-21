@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;900&display=swap');
+
+:root{
+  --button-size: 50px;
+  --buttons-x: calc(100vw / var(--button-size));
+  --buttons-y: calc(100vh / var(--button-size));
+}
+
+*{
+  font-family: 'Inter', sans-serif;
+  color: #efefef;
+  margin: 0;
+}
+
+body{
+  overflow: hidden;
+  background-color: #222;
+  animation: load 1s ease-in-out;
+}
+
+#main{
+  width: 100vw;
+  height: 100vh;
+  gap: 5vh;
+  scale: 125%;
+}
+
+#main, #info{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#info{
+  gap: 25px;
+}
+
+#info button{
+  background-color: #333;
+  border: none;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+#info button:hover{
+  background-color: #444;
+  cursor: pointer;
+}
+
+#buttonContainer{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: calc(var(--buttons-x) * var(--button-size));
+  height: calc(var(--buttons-y) * var(--button-size));
+  border: 1px solid #333;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#buttonContainer button{
+  width: var(--button-size);
+  height: var(--button-size);
+  background-color: #222;
+  border: .5px solid #333;
+  -webkit-user-drag: none;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+#buttonContainer button:hover{
+  background-color: #333;
+}
+
+#buttonContainer button.marked{
+  background-color: red;
+  border: 0;
+}
+
+#buttonContainer button.revealed{
+  background-color: green;
+  border: 0;
+}
+
+@keyframes load {
+  0%{
+    opacity: 0;
+  }
+
+  100%{
+    opacity: 1;
+  }
+}
