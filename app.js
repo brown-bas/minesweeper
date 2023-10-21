@@ -63,57 +63,70 @@ function displayInDOM(){
 }
 
 //Button click handler
-function handleClick(e, posX, posY){
-  let hasBeenMarked = marked.filter(x=>x[0] == posX && x[1] == posY).length
-  let currentButton = buttonContainer.children[(((tableW * posY-1) + posX)) + 1]
-  if(e.ctrlKey && !currentButton.classList.contains("revealed")){
+function handleClick(e, posX, posY) {
+  let hasBeenMarked = marked.filter((x) => x[0] == posX && x[1] == posY).length;
+  let currentButton = buttonContainer.children[tableW * posY - 1 + posX + 1];
+  if (e.ctrlKey && !currentButton.classList.contains("revealed")) {
     //Marker click
-    currentButton.classList.toggle("marked")
-    if(hasBeenMarked){
+    currentButton.classList.toggle("marked");
+    if (hasBeenMarked) {
       //Coord has been marked
-      marked.splice(marked.indexOf([posX, posY]), 1)
-      console.log(`${posX} ${posY} unmarked!`)
-      if(marked.map(x=>mines.map(y=>x==y)).length == mines.length){
-        gameOver(posY, posX, true)
+      marked.splice(marked.indexOf([posX, posY]), 1);
+      //console.log(`${posX} ${posY} unmarked!`)
+      if (
+        marked
+          .map((x) => mines.map((y) => JSON.stringify(x) == JSON.stringify(y)))
+          .filter((x) => x.includes(true)).length == mines.length &&
+        marked.length == mines.length
+      ) {
+        gameOver(posY, posX, true);
       }
     } else {
       //Coord hasn't been marked yet
-      marked.push([posX, posY])
-      console.log(`${posX} ${posY} marked!`)
-      if(marked.map(x=>mines.map(y=>x==y)).length == mines.length){
-        gameOver(posY, posX, true)
+      marked.push([posX, posY]);
+      //console.log(`${posX} ${posY} marked!`)
+      if (
+        marked
+          .map((x) => mines.map((y) => JSON.stringify(x) == JSON.stringify(y)))
+          .filter((x) => x.includes(true)).length == mines.length &&
+        marked.length == mines.length
+      ) {
+        gameOver(posY, posX, true);
       }
     }
   } else {
     //Normal click
-    if(!currentButton.classList.contains("marked") && !currentButton.classList.contains("revealed")){
-      reveal(posX, posY)
-      if(checkIfMine(posX, posY)) gameOver(posX, posY, false)
+    if (
+      !currentButton.classList.contains("marked") &&
+      !currentButton.classList.contains("revealed")
+    ) {
+      reveal(posX, posY);
+      if (checkIfMine(posX, posY)) gameOver(posX, posY, false);
     }
   }
 }
 
 //Makes things easier, checks if there's a mine on the coord
-function checkIfMine(posX, posY){
-  return mines.filter(x=>(x[0] == posX && x[1] == posY)).length
+function checkIfMine(posX, posY) {
+  return mines.filter((x) => x[0] == posX && x[1] == posY).length;
 }
 
 //Name speaks for itself
-function gameOver(posX, posY, won){
+function gameOver(posX, posY, won) {
   for (let i = 0; i < buttonContainer.childElementCount; i++) {
-    let currentButtonY = Math.floor(i / tableW)
-    let currentButtonX = (i - (currentButtonY * tableW))
-    buttonContainer.children[i].setAttribute("tabindex", "-1")
-    reveal(currentButtonX, currentButtonY)
+    let currentButtonY = Math.floor(i / tableW);
+    let currentButtonX = i - currentButtonY * tableW;
+    buttonContainer.children[i].setAttribute("tabindex", "-1");
+    reveal(currentButtonX, currentButtonY);
   }
-  if(won){
+  if (won) {
     infoOutcome.textContent = "You won!";
     infoLastMove.textContent = "You managed to find all of the mines!";
     buttonContainer.style.pointerEvents = "none";
     buttonContainer.style.opacity = "0.5";
   } else {
     infoOutcome.textContent = "You lost!";
-    infoLastMove.textContent = `There was a mine at ${posX+1}; ${posY+1}`;
+    infoLastMove.textContent = `There was a mine at ${posX + 1}; ${posY + 1}`;
     buttonContainer.style.pointerEvents = "none";
     buttonContainer.style.opacity = "0.5";
   }
@@ -121,22 +134,22 @@ function gameOver(posX, posY, won){
 }
 
 //Checks the surroudings of the currently clicked coord
-function checkSurroundings(posX, posY){
+function checkSurroundings(posX, posY) {
   let surroundings = [];
-  console.log(posX, posY)
-  if(posY != 0){
-    surroundings.push(table[posY-1][posX])
+  //console.log(posX, posY)
+  if (posY != 0) {
+    surroundings.push(table[posY - 1][posX]);
   }
-  if(posY != tableH-1){
-    surroundings.push(table[posY+1][posX])
+  if (posY != tableH - 1) {
+    surroundings.push(table[posY + 1][posX]);
   }
-  if(posX != 0){
-    surroundings.push(table[posY][posX-1])
+  if (posX != 0) {
+    surroundings.push(table[posY][posX - 1]);
   }
-  if(posX != tableW-1){
-    surroundings.push(table[posY][posX+1])
+  if (posX != tableW - 1) {
+    surroundings.push(table[posY][posX + 1]);
   }
-  return surroundings
+  return surroundings;
 }
 
 //Reveals if the coords has a mine on it or it's close to a mine
